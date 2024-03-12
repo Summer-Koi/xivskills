@@ -8,6 +8,7 @@ export class GameHandle {
     buffs: Buff[] = [];
     combos: Combo[] = [];
     
+    GCD: number = 2.5;
 
     comboNextStep(skill: Skill) {
         this.combos.forEach(combo => {
@@ -15,5 +16,4 @@ export class GameHandle {
             combo.nextCombo(check);
         });
     }
-    
 }

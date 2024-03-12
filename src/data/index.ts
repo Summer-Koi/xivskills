@@ -3,15 +3,15 @@ import { Skill, Combo, Buff, Resource } from '../xivsim'
 
 export interface Job {
     name: string;
-    combos: Combo[];
-    skills: Skill[];
-    buffs: Buff[];
-    resources: Resource[];
+    combos: { [key: string]: Combo };
+    skills: { [key: string]: Skill };
+    buffs: { [key: string]: Buff};
+    resources: { [key: string]: Resource };
 }
 
 export const bindJobWithGameHandle = (job: Job, gameHandle: GameHandle) => {
-    job.skills.forEach(skill => {
+    Object.values(job.skills).forEach(skill => {
         skill.gameHandle = gameHandle;
     });
-    gameHandle.combos = job.combos;
+    gameHandle.combos = Object.values(job.combos);
 }
