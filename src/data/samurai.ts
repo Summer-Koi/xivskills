@@ -1,4 +1,4 @@
-import { AddResource, ClearResource, DerivedSkill, PrintMessage, Skill, SkillCategory } from "../xivsim";
+import { ActivateBuff, AddResource, Buff, ClearResource, DerivedSkill, PrintMessage, Skill, SkillCategory } from "../xivsim";
 import { Combo } from "../xivsim";
 import { Resource } from "../xivsim";
 import { SkillAttack} from "../xivsim";
@@ -41,12 +41,17 @@ const YukiCombo = new Combo([Hakaze, Yukikaze], AllBasicWeaponSkills);
 const KashaCombo = new Combo([Hakaze, Shifu, Kasha], AllBasicWeaponSkills);
 const GekkoCombo = new Combo([Hakaze, Jinpu, Gekko], AllBasicWeaponSkills);
 
+const Fuka = new Buff('风花', 40)
+const Fugetsu = new Buff('风月', 40)
+
 Hakaze.addCastEffect(SkillAttack(200))
-Jinpu.addCastEffect(IfComboSuccess(GekkoCombo, SkillAttack(280), SkillAttack(120)))
+Jinpu.addCastEffect(IfComboSuccess(GekkoCombo, SkillAttack(280), SkillAttack(120)), ActivateBuff(Fugetsu))
 Gekko.addCastEffect(IfComboSuccess(GekkoCombo, SkillAttack(380), SkillAttack(170)))
-Shifu.addCastEffect(IfComboSuccess(KashaCombo, SkillAttack(280), SkillAttack(120)))
+Shifu.addCastEffect(IfComboSuccess(KashaCombo, SkillAttack(280), SkillAttack(120)), ActivateBuff(Fuka))
 Kasha.addCastEffect(IfComboSuccess(KashaCombo, SkillAttack(380), SkillAttack(170)))
 Yukikaze.addCastEffect(IfComboSuccess(YukiCombo, SkillAttack(300), SkillAttack(120)))
+
+/* Kenki */
 
 const Kenki = new Resource('Kenki', 100, 0)
 
@@ -56,6 +61,8 @@ Gekko.addCastEffect(IfComboSuccess(GekkoCombo, AddResource(Kenki, 10)))
 Shifu.addCastEffect(IfComboSuccess(KashaCombo, AddResource(Kenki, 5)))
 Kasha.addCastEffect(IfComboSuccess(KashaCombo, AddResource(Kenki, 10)))
 Yukikaze.addCastEffect(IfComboSuccess(YukiCombo, AddResource(Kenki, 15)))
+
+/* Sen & Iaijutsu */
 
 const Getsu = new Resource('Getsu', 1, 0)
 const Ka = new Resource('Ka', 1, 0)

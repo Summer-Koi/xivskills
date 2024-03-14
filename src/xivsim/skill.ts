@@ -130,3 +130,9 @@ export function PrintMessage(message: string) {
         console.log(message);
     }
 }
+
+export function ActivateBuff(buff: Buff) {
+    return (s: Skill) => {
+        buff.activate();
+    }
+}
