@@ -1,4 +1,4 @@
-import { Skill, CastEffect, CastCondition } from "./skill";
+import { Skill,  CastCondition } from "./skill";
 import { Resource } from "./resource";
 import { Combo } from "./combo";
 
@@ -28,7 +28,7 @@ export function IfResourceEnough(resource: Resource, thredshold: number, success
 
 } */
 
-export function IfComboSuccess(combo: Combo, success: CastEffect, fail?: CastEffect): CastEffect {
+/* export function IfComboSuccess(combo: Combo, success: CastEffect, fail?: CastEffect): CastEffect {
     return (s: Skill) => {
         if (combo.checkCombo(s)) {
             return success(s);
@@ -39,4 +39,4 @@ export function IfComboSuccess(combo: Combo, success: CastEffect, fail?: CastEff
             }
         }
     }
-}
+} */
