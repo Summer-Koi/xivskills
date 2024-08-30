@@ -1,8 +1,8 @@
-import { ActivateBuff, AddResource, Buff, ClearResource, DerivedSkill, PrintMessage, Skill, SkillCategory } from "../xivsim";
+import { Buff, DerivedSkill, Skill, SkillCategory } from "../xivsim";
 import { Combo } from "../xivsim";
 import { Resource } from "../xivsim";
-import { SkillAttack} from "../xivsim";
-import { IfComboSuccess, IfResourceEnough } from "../xivsim/logicOperator";
+import { SkillAttack, ActivateBuff, AddResource, ClearResource, PrintMessage } from "../xivsim/gameHandle";
+import { IfComboSuccess } from "../xivsim/logicOperator";
 
 /* basic weapon skills */
 
@@ -85,12 +85,12 @@ const MidareSetsugekkaCondition = (skill: Skill) => {
     return num >= 3 - 1e-8
 }
 
-const clearSen = [ClearResource(Getsu), ClearResource(Ka), ClearResource(Setsu)]
+const clearSenEffect = [ClearResource(Getsu), ClearResource(Ka), ClearResource(Setsu)]
 
 Higanbana.addCastCondition(HiganbanaCondition)
-Higanbana.addCastEffect(PrintMessage('Higanbana!'), ...clearSen)
+Higanbana.addCastEffect(PrintMessage('Higanbana!'), ...clearSenEffect)
 MidareSetsugekka.addCastCondition(MidareSetsugekkaCondition)
-MidareSetsugekka.addCastEffect(PrintMessage('MidareSetsugekka!'), ...clearSen)
+MidareSetsugekka.addCastEffect(PrintMessage('MidareSetsugekka!'), ...clearSenEffect)
 
 const IaijutsuDerivation: DerivedSkill[] = [
     {skill: MidareSetsugekka, condition: MidareSetsugekkaCondition},

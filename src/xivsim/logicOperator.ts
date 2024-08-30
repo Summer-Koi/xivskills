@@ -2,7 +2,7 @@ import { Skill, CastEffect, CastCondition } from "./skill";
 import { Resource } from "./resource";
 import { Combo } from "./combo";
 
-export function IfResourceEnough(resource: Resource, thredshold: number): CastCondition;
+/* export function IfResourceEnough(resource: Resource, thredshold: number): CastCondition;
 export function IfResourceEnough(resource: Resource, thredshold: number, success: CastEffect, fail?: CastEffect): CastEffect;
 export function IfResourceEnough(resource: Resource, thredshold: number, success?: CastEffect, fail?: CastEffect)
 {
@@ -26,7 +26,7 @@ export function IfResourceEnough(resource: Resource, thredshold: number, success
         }
     }
 
-}
+} */
 
 export function IfComboSuccess(combo: Combo, success: CastEffect, fail?: CastEffect): CastEffect {
     return (s: Skill) => {

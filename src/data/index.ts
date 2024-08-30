@@ -14,4 +14,5 @@ export const bindJobWithGameHandle = (job: Job, gameHandle: GameHandle) => {
         skill.gameHandle = gameHandle;
     });
     gameHandle.combos = Object.values(job.combos);
+    gameHandle.buffs = job.buffs;
 }

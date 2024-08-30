@@ -11,18 +11,14 @@ export class Resource {
         this.current = current;
     }
 
-    public setCurrent(current: number) {
-        this.current = current;
-    }
-
-    public addCurrent(add: number) {
+    public add(add: number) {
         this.current += add;
         if (this.current > this.max) {
             this.current = this.max;
         }
     }
 
-    public subCurrent(sub: number) {
+    public sub(sub: number) {
         this.current -= sub;
         if (this.current < 0) {
             this.current = 0;
