@@ -8,11 +8,10 @@ export class GameHandle {
     resources: Resource[] = [];
     buffs: { [key: string]: Buff } = {};
     combos: Combo[] = [];
-    
+
     GCD: number = 2500; // ms
 
     cast(skill: Skill, derivingCast: boolean = false) {
-
         /* handle derived skills */
         if (skill.derived && !derivingCast) {
             throw new Error('Cannot cast a derived skill directly.');
@@ -20,8 +19,8 @@ export class GameHandle {
         skill._derivedSkills.sort((a, b) => b.priority - a.priority);
         for (let derived of skill._derivedSkills) {
             if (derived.condition(this)) {
-                console.log('Skill derived! ' + derived.skill.name + ' is casted.')
-                this.cast(derived.skill, derivingCast = true);
+                console.log('Skill derived! ' + derived.skill.name + ' is casted.');
+                this.cast(derived.skill, (derivingCast = true));
                 return;
             }
         }
@@ -40,14 +39,14 @@ export class GameHandle {
         }
 
         /* handle combo states */
-        this.combos.forEach(combo => {
+        this.combos.forEach((combo) => {
             let check = combo.checkCombo(skill);
             combo.nextCombo(check);
         });
     }
 
     bind(job: Job) {
-        Object.values(job.skills).forEach(skill => {
+        Object.values(job.skills).forEach((skill) => {
             skill.attach(this);
         });
         this.combos = Object.values(job.combos);

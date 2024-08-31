@@ -7,6 +7,6 @@ export interface Job {
     name: string;
     combos: { [key: string]: Combo };
     skills: { [key: string]: Skill };
-    buffs: { [key: string]: Buff};
+    buffs: { [key: string]: Buff };
     resources: { [key: string]: Resource };
 }

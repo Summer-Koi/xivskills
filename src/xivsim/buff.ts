@@ -20,4 +20,3 @@ export class Buff {
         this.active = false;
     }
 }
-

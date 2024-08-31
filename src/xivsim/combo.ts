@@ -1,4 +1,4 @@
-import {Skill} from "./skill";
+import { Skill } from './skill';
 
 export class Combo {
     comboSkills: Skill[];
@@ -10,9 +10,9 @@ export class Combo {
 
     currentComboStep: number = 0;
 
-    getNextComboSkill(){
+    getNextComboSkill() {
         if (this.currentComboStep == 0) {
-            return null
+            return null;
         }
         return this.comboSkills[this.currentComboStep];
     }
@@ -32,10 +32,8 @@ export class Combo {
             if (this.currentComboStep >= this.comboSkills.length) {
                 this.currentComboStep = 0;
             }
-        }
-        else {
+        } else {
             this.currentComboStep = 0;
         }
     }
-
 }

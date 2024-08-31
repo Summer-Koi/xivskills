@@ -1,36 +1,39 @@
-import { GameHandle } from "./gameHandle";
-import { Effect } from "./effect";
+import { GameHandle } from './gameHandle';
+import { Effect } from './effect';
 
 export enum SkillCategory {
-    WeaponSkill, Ability, Spell
+    WeaponSkill,
+    Ability,
+    Spell,
 }
 
 export type CastCondition = (gameHandle: GameHandle) => boolean;
 export type DerivedSkill = {
-    skill: Skill,
-    priority: number,  // priority of derived skill, higher priority will be casted
-    condition: CastCondition,
-}
+    skill: Skill;
+    priority: number; // priority of derived skill, higher priority will be casted
+    condition: CastCondition;
+};
 
 export class Skill {
     name: string;
     description: string;
     category: SkillCategory;
-    derived: boolean;       // whether this skill is derived, derived skill will not be casted directly
+    derived: boolean; // whether this skill is derived, derived skill will not be casted directly
 
-    recastTime: number;     // recastTime * GCD = real recast time
-    castTime: number;       // castTime * GCD = real cast time
+    recastTime: number; // recastTime * GCD = real recast time
+    castTime: number; // castTime * GCD = real cast time
 
-    selfRecast: boolean;    // independent recast 独立复唱
+    selfRecast: boolean; // independent recast 独立复唱
 
-    constructor(name: string, 
-                description: string,
-                category: SkillCategory,
-                derived: boolean = false,
-                recastTime: number = 1,     // GCDs
-                castTime: number = 0,       // GCDs
-                selfRecast: boolean = false)
-    {
+    constructor(
+        name: string,
+        description: string,
+        category: SkillCategory,
+        derived: boolean = false,
+        recastTime: number = 1, // GCDs
+        castTime: number = 0, // GCDs
+        selfRecast: boolean = false,
+    ) {
         this.name = name;
         this.description = description;
         this.category = category;
@@ -66,5 +69,4 @@ export class Skill {
     addCastEffect(...e: Effect[]) {
         this._castEffectList.push(...e);
     }
-
 }

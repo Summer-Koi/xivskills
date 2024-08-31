@@ -1,8 +1,7 @@
-import { GameHandle } from "./gameHandle";
-import { Combo } from "./combo";
-import { Skill } from "./skill";
-import { Resource } from "./resource";
-
+import { GameHandle } from './gameHandle';
+import { Combo } from './combo';
+import { Skill } from './skill';
+import { Resource } from './resource';
 
 export abstract class Effect {
     protected _gameHandle: GameHandle | undefined;
@@ -16,8 +15,6 @@ export abstract class Effect {
     }
     abstract apply(): void;
 }
-
-
 
 class DamageEffect extends Effect {
     rawPotency: number;
@@ -64,7 +61,7 @@ class ResourceClearEffect extends ResourceEffect {
 }
 
 class ComboSuccessEffect extends Effect {
-    skill: Skill
+    skill: Skill;
     combo: Combo;
     successEffect: Effect;
     failEffect?: Effect;
@@ -86,8 +83,7 @@ class ComboSuccessEffect extends Effect {
         this.checkGameHandle();
         if (this.combo.checkCombo(this.skill)) {
             this.successEffect.apply();
-        }
-        else {
+        } else {
             if (this.failEffect !== undefined) {
                 this.failEffect.apply();
             }
