@@ -1,5 +1,3 @@
-import { Skill } from './skill';
-
 export class Resource {
     name: string;
     max: number;

@@ -1,7 +1,7 @@
-import { Skill } from './skill';
-import { Combo } from './combo';
-import { Buff } from './buff';
-import { Resource } from './resource';
+import { Skill } from './skill.ts';
+import { Combo } from './combo.ts';
+import { Buff } from './buff.ts';
+import { Resource } from './resource.ts';
 
 export interface Job {
     name: string;

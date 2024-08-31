@@ -1,9 +1,7 @@
-import { Buff, DerivedSkill, Skill, SkillCategory } from '../xivsim';
-import { Combo } from '../xivsim';
-import { Resource } from '../xivsim';
-import { Damage, ComboSuccess, ChangeResource, ClearResource } from '../xivsim/effect';
-import { GameHandle } from '../xivsim/gameHandle';
-
+import { DerivedSkill, Skill, SkillCategory } from '../xivsim/index.ts';
+import { Combo } from '../xivsim/index.ts';
+import { Resource } from '../xivsim/index.ts';
+import { Damage, ComboSuccess, ChangeResource, ClearResource } from '../xivsim/effect.ts';
 /* basic weapon skills */
 
 const Hakaze = new Skill('刃风', '', SkillCategory.WeaponSkill);
@@ -20,8 +18,8 @@ const YukiCombo = new Combo([Hakaze, Yukikaze], AllBasicWeaponSkills);
 const KashaCombo = new Combo([Hakaze, Shifu, Kasha], AllBasicWeaponSkills);
 const GekkoCombo = new Combo([Hakaze, Jinpu, Gekko], AllBasicWeaponSkills);
 
-const Fuka = new Buff('风花', 40);
-const Fugetsu = new Buff('风月', 40);
+/* const Fuka = new Buff('风花', 40);
+const Fugetsu = new Buff('风月', 40); */
 
 Hakaze.addCastEffect(Damage(200));
 Jinpu.addCastEffect(ComboSuccess(Jinpu, GekkoCombo, Damage(280), Damage(120)) /* ActivateBuff(Fugetsu) */);
@@ -55,12 +53,12 @@ const Iaijutsu = new Skill('Iaijutsu', '', SkillCategory.WeaponSkill, false, 1, 
 const Higanbana = new Skill('Higanbana', '', SkillCategory.WeaponSkill, true, 1, 18 / 25, false);
 const MidareSetsugekka = new Skill('MidareSetsugekka', '', SkillCategory.WeaponSkill, true, 1, 18 / 25, false);
 
-const HiganbanaCondition = (gameHandle: GameHandle) => {
-    let num = Getsu.current + Ka.current + Setsu.current;
+const HiganbanaCondition = () => {
+    const num = Getsu.current + Ka.current + Setsu.current;
     return num >= 1 - 1e-8;
 };
-const MidareSetsugekkaCondition = (gameHandle: GameHandle) => {
-    let num = Getsu.current + Ka.current + Setsu.current;
+const MidareSetsugekkaCondition = () => {
+    const num = Getsu.current + Ka.current + Setsu.current;
     return num >= 3 - 1e-8;
 };
 

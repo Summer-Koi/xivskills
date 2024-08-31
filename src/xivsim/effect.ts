@@ -1,7 +1,7 @@
-import { GameHandle } from './gameHandle';
-import { Combo } from './combo';
-import { Skill } from './skill';
-import { Resource } from './resource';
+import { GameHandle } from './gameHandle.ts';
+import { Combo } from './combo.ts';
+import { Skill } from './skill.ts';
+import { Resource } from './resource.ts';
 
 export abstract class Effect {
     protected _gameHandle: GameHandle | undefined;
