@@ -7,7 +7,7 @@ on:
     branches:
       - main
 jobs:
-  prettier:
+  format:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
@@ -26,3 +26,5 @@ jobs:
         run: pnpm install -D
       - name: Check formatting with Prettier
         run: pnpm prettier:check
+      - name: Check formatting with ESLint
+        run: pnpm lint

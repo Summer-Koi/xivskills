@@ -16,6 +16,7 @@
 	"scripts": {
 		"test": "mocha --config .mocharc.yaml",
 		"prettier:format": "pnpm exec prettier . --write",
-		"prettier:check": "pnpm exec prettier . --check"
+		"prettier:check": "pnpm exec prettier . --check",
+		"lint": "pnpm eslint ."
 	}
 }
