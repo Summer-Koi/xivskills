@@ -65,7 +65,12 @@ class ComboSuccessEffect extends Effect {
     combo: Combo;
     successEffect: Effect;
     failEffect?: Effect;
-    constructor(skill: Skill, combo: Combo, successEffect: Effect, failEffect?: Effect) {
+    constructor(
+        skill: Skill,
+        combo: Combo,
+        successEffect: Effect,
+        failEffect?: Effect,
+    ) {
         super();
         this.skill = skill;
         this.combo = combo;
@@ -100,6 +105,11 @@ export function ChangeResource(resource: Resource, delta: number) {
 export function ClearResource(resource: Resource) {
     return new ResourceClearEffect(resource);
 }
-export function ComboSuccess(skill: Skill, combo: Combo, successEffect: Effect, failEffect?: Effect) {
+export function ComboSuccess(
+    skill: Skill,
+    combo: Combo,
+    successEffect: Effect,
+    failEffect?: Effect,
+) {
     return new ComboSuccessEffect(skill, combo, successEffect, failEffect);
 }

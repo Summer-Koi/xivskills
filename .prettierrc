@@ -3,5 +3,14 @@
     "useTabs": false,
     "semi": true,
     "singleQuote": true,
-    "printWidth": 100
+    "printWidth": 80,
+
+    "overrides": [
+        {
+            "files": "src/data/*.ts",
+            "options": {
+                "printWidth": 120
+            }
+        }
+    ]
 }

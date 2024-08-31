@@ -19,7 +19,9 @@ export class GameHandle {
         skill._derivedSkills.sort((a, b) => b.priority - a.priority);
         for (const derived of skill._derivedSkills) {
             if (derived.condition(this)) {
-                console.log('Skill derived! ' + derived.skill.name + ' is casted.');
+                console.log(
+                    'Skill derived! ' + derived.skill.name + ' is casted.',
+                );
                 this.cast(derived.skill, (derivingCast = true));
                 return;
             }
