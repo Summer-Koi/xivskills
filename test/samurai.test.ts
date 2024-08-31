@@ -1,7 +1,7 @@
 import { expect } from 'earl';
-import { SamuraiJob } from '../src/data/samurai';
-import { GameHandle } from '../src/xivsim/gameHandle';
-import smr from '../src/data/samurai';
+import { SamuraiJob } from '../src/data/samurai.ts';
+import { GameHandle } from '../src/xivsim/gameHandle.ts';
+import smr from '../src/data/samurai.ts';
 
 const gh = new GameHandle();
 gh.bind(SamuraiJob);

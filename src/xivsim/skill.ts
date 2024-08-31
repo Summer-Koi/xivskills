@@ -1,5 +1,5 @@
-import { GameHandle } from './gameHandle';
-import { Effect } from './effect';
+import { GameHandle } from './gameHandle.ts';
+import { Effect } from './effect.ts';
 
 export enum SkillCategory {
     WeaponSkill,
@@ -47,7 +47,7 @@ export class Skill {
     private _gameHandle: GameHandle | undefined;
     attach(gameHandle: GameHandle) {
         this._gameHandle = gameHandle;
-        for (let effect of this._castEffectList) {
+        for (const effect of this._castEffectList) {
             effect.attach(gameHandle);
         }
     }

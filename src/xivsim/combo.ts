@@ -1,4 +1,4 @@
-import { Skill } from './skill';
+import { Skill } from './skill.ts';
 
 export class Combo {
     comboSkills: Skill[];
