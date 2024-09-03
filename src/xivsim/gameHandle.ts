@@ -1,15 +1,19 @@
 import { Resource } from './resource.ts';
-import { Buff } from './buff.ts';
+import { Buff, ActiveBuff } from './buff.ts';
 import { Skill } from './skill.ts';
 import { Combo } from './combo.ts';
 import { Job } from './job.ts';
+import { SkillLogger } from './logger.ts';
 
 export class GameHandle {
-    resources: Resource[] = [];
+    resources: { [key: string]: Resource } = {};
     buffs: { [key: string]: Buff } = {};
+    activeBuffs: ActiveBuff[] = [];
     combos: Combo[] = [];
 
     GCD: number = 2500; // ms
+
+    skillLogger: SkillLogger = new SkillLogger();
 
     cast(skill: Skill, derivingCast: boolean = false) {
         /* handle derived skills */
@@ -19,9 +23,6 @@ export class GameHandle {
         skill._derivedSkills.sort((a, b) => b.priority - a.priority);
         for (const derived of skill._derivedSkills) {
             if (derived.condition(this)) {
-                console.log(
-                    'Skill derived! ' + derived.skill.name + ' is casted.',
-                );
                 this.cast(derived.skill, (derivingCast = true));
                 return;
             }
@@ -40,11 +41,14 @@ export class GameHandle {
             effect.apply();
         }
 
-        /* handle combo states */
+        /* update combo status */
         this.combos.forEach((combo) => {
             const check = combo.checkCombo(skill);
             combo.nextCombo(check);
         });
+
+        /* skill logging */
+        this.skillLogger.log(skill);
     }
 
     bind(job: Job) {
@@ -53,12 +57,34 @@ export class GameHandle {
         });
         this.combos = Object.values(job.combos);
         this.buffs = job.buffs;
+        this.resources = job.resources;
     }
 
     lastDamage: number = 0;
     dealFinalDamage(damage: number) {
         this.lastDamage = damage;
     }
+
+    resetCombos() {
+        this.combos.forEach((combo) => {
+            combo.reset();
+        });
+    }
+    resetResources() {
+        Object.values(this.resources).forEach((resource) => {
+            resource.setToMin();
+        });
+    }
+    resetBuffs() {
+        this.activeBuffs = [];
+    }
+    reset() {
+        this.resetCombos();
+        this.resetResources();
+        this.resetBuffs();
+        this.skillLogger.clear();
+    }
+
     getLastDamage() {
         return this.lastDamage;
     }

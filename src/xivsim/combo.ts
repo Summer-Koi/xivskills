@@ -36,4 +36,8 @@ export class Combo {
             this.currentComboStep = 0;
         }
     }
+
+    reset() {
+        this.currentComboStep = 0;
+    }
 }

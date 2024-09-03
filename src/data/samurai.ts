@@ -1,7 +1,8 @@
 import { DerivedSkill, Skill, SkillCategory } from '../xivsim/index.ts';
 import { Combo } from '../xivsim/index.ts';
 import { Resource } from '../xivsim/index.ts';
-import { Damage, ComboSuccess, ChangeResource, ClearResource } from '../xivsim/effect.ts';
+import { Buff } from '../xivsim/index.ts';
+import { Damage, ComboSuccess, ChangeResource, ClearResource, AddBuff } from '../xivsim/effect.ts';
 /* basic weapon skills */
 
 const Hakaze = new Skill('刃风', '', SkillCategory.WeaponSkill);
@@ -18,13 +19,13 @@ const YukiCombo = new Combo([Hakaze, Yukikaze], AllBasicWeaponSkills);
 const KashaCombo = new Combo([Hakaze, Shifu, Kasha], AllBasicWeaponSkills);
 const GekkoCombo = new Combo([Hakaze, Jinpu, Gekko], AllBasicWeaponSkills);
 
-/* const Fuka = new Buff('风花', 40);
-const Fugetsu = new Buff('风月', 40); */
+const Fuka = new Buff('风花');
+const Fugetsu = new Buff('风月');
 
 Hakaze.addCastEffect(Damage(200));
-Jinpu.addCastEffect(ComboSuccess(Jinpu, GekkoCombo, Damage(280), Damage(120)) /* ActivateBuff(Fugetsu) */);
+Jinpu.addCastEffect(ComboSuccess(Jinpu, GekkoCombo, Damage(280), Damage(120)), AddBuff(Fugetsu, 40));
 Gekko.addCastEffect(ComboSuccess(Gekko, GekkoCombo, Damage(380), Damage(170)));
-Shifu.addCastEffect(ComboSuccess(Shifu, KashaCombo, Damage(280), Damage(120)) /* ActivateBuff(Fuka) */);
+Shifu.addCastEffect(ComboSuccess(Shifu, KashaCombo, Damage(280), Damage(120)), AddBuff(Fuka, 40));
 Kasha.addCastEffect(ComboSuccess(Kasha, KashaCombo, Damage(380), Damage(170)));
 Yukikaze.addCastEffect(ComboSuccess(Yukikaze, YukiCombo, Damage(300), Damage(120)));
 
@@ -49,9 +50,9 @@ Gekko.addCastEffect(ComboSuccess(Gekko, GekkoCombo, ChangeResource(Getsu, 1)));
 Kasha.addCastEffect(ComboSuccess(Kasha, KashaCombo, ChangeResource(Ka, 1)));
 Yukikaze.addCastEffect(ComboSuccess(Yukikaze, YukiCombo, ChangeResource(Setsu, 1)));
 
-const Iaijutsu = new Skill('Iaijutsu', '', SkillCategory.WeaponSkill, false, 1, 18 / 25, false);
-const Higanbana = new Skill('Higanbana', '', SkillCategory.WeaponSkill, true, 1, 18 / 25, false);
-const MidareSetsugekka = new Skill('MidareSetsugekka', '', SkillCategory.WeaponSkill, true, 1, 18 / 25, false);
+const Iaijutsu = new Skill('居合术', '', SkillCategory.WeaponSkill, false, 1, 18 / 25, false);
+const Higanbana = new Skill('彼岸花', '', SkillCategory.WeaponSkill, true, 1, 18 / 25, false);
+const MidareSetsugekka = new Skill('纷乱雪月花', '', SkillCategory.WeaponSkill, true, 1, 18 / 25, false);
 
 const HiganbanaCondition = () => {
     const num = Getsu.current + Ka.current + Setsu.current;

@@ -2,21 +2,14 @@
 
 export class Buff {
     name: string;
-    duration: number;
-    stack: number = 0;
 
-    constructor(name: string, duration: number) {
+    constructor(name: string) {
         this.name = name;
-        this.duration = duration;
     }
-    active: boolean = false;
-    startTime: number = 0;
+}
 
-    public activate() {
-        this.active = true;
-    }
-
-    public deactivate() {
-        this.active = false;
-    }
+export interface ActiveBuff {
+    buff: Buff;
+    duration: number;
+    startTime: number;
 }

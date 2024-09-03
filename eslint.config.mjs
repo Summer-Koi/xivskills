@@ -6,4 +6,12 @@ import tseslint from 'typescript-eslint';
 export default tseslint.config(
     eslint.configs.recommended,
     ...tseslint.configs.recommended,
+    ...tseslint.configs.strict,
+    {
+        name: 'chai-friendly',
+        files: ['**/*.test.ts'],
+        rules: {
+            '@typescript-eslint/no-unused-expressions': 'off',
+        },
+    },
 );

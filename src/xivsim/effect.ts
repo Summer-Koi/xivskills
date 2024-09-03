@@ -2,18 +2,23 @@ import { GameHandle } from './gameHandle.ts';
 import { Combo } from './combo.ts';
 import { Skill } from './skill.ts';
 import { Resource } from './resource.ts';
+import { Buff } from './buff.ts';
 
 export abstract class Effect {
     protected _gameHandle: GameHandle | undefined;
     public attach(gameHandle: GameHandle) {
         this._gameHandle = gameHandle;
     }
-    protected checkGameHandle() {
+    protected applyWithPreChecks() {
         if (this._gameHandle === undefined) {
             throw new Error('GameHandle not attached');
         }
+        this.doApply(this._gameHandle);
     }
-    abstract apply(): void;
+    protected abstract doApply(handle: GameHandle): void;
+    apply(): void {
+        this.applyWithPreChecks();
+    }
 }
 
 class DamageEffect extends Effect {
@@ -22,9 +27,8 @@ class DamageEffect extends Effect {
         super();
         this.rawPotency = rawPotency;
     }
-    apply() {
-        this.checkGameHandle();
-        this._gameHandle!.dealFinalDamage(this.rawPotency);
+    doApply(handle: GameHandle) {
+        handle.dealFinalDamage(this.rawPotency);
     }
 }
 
@@ -42,23 +46,47 @@ class ResourceChangeEffect extends ResourceEffect {
         super(resource);
         this.delta = delta;
     }
-    apply() {
-        this.checkGameHandle();
+    doApply() {
         this.resource.current += this.delta;
-        console.log(`Resource ${this.resource.name} changed by ${this.delta}`);
     }
 }
 
 class ResourceClearEffect extends ResourceEffect {
-    constructor(resource: Resource) {
-        super(resource);
-    }
-    apply() {
-        this.checkGameHandle();
+    doApply() {
         this.resource.setToMin();
-        console.log(`Resource ${this.resource.name} cleared`);
     }
 }
+
+abstract class BuffEffect extends Effect {
+    buff: Buff;
+    constructor(buff: Buff) {
+        super();
+        this.buff = buff;
+    }
+}
+
+class AddBuffEffect extends BuffEffect {
+    duration: number;
+    constructor(buff: Buff, duration: number) {
+        super(buff);
+        this.duration = duration;
+    }
+    doApply(handle: GameHandle) {
+        for (const activeBuff of handle.activeBuffs) {
+            if (activeBuff.buff === this.buff) {
+                activeBuff.duration = this.duration;
+                return;
+            }
+        }
+        handle.activeBuffs.push({
+            buff: this.buff,
+            duration: this.duration,
+            startTime: 0,
+        });
+    }
+}
+
+/* TODO: ComboSuccessEffect 应该有一个父类 SelectEffect */
 
 class ComboSuccessEffect extends Effect {
     skill: Skill;
@@ -84,8 +112,7 @@ class ComboSuccessEffect extends Effect {
             this.failEffect.attach(gameHandle);
         }
     }
-    apply() {
-        this.checkGameHandle();
+    doApply() {
         if (this.combo.checkCombo(this.skill)) {
             this.successEffect.apply();
         } else {
@@ -104,6 +131,9 @@ export function ChangeResource(resource: Resource, delta: number) {
 }
 export function ClearResource(resource: Resource) {
     return new ResourceClearEffect(resource);
+}
+export function AddBuff(buff: Buff, duration: number) {
+    return new AddBuffEffect(buff, duration);
 }
 export function ComboSuccess(
     skill: Skill,
