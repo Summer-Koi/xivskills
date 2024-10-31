@@ -1,9 +1,19 @@
 import { Resource } from './resource.ts';
-import { Buff, ActiveBuff } from './buff.ts';
+import {
+    Buff,
+    ActiveBuff,
+    BuffHookTarget,
+    BuffHook,
+    SkillCastBuffHook,
+} from './buff.ts';
 import { Skill } from './skill.ts';
 import { Combo } from './combo.ts';
 import { Job } from './job.ts';
 import { SkillLogger } from './logger.ts';
+
+/* hook cast procedure */
+
+/* status proxy */
 
 export class GameHandle {
     resources: { [key: string]: Resource } = {};
@@ -16,6 +26,11 @@ export class GameHandle {
     skillLogger: SkillLogger = new SkillLogger();
 
     cast(skill: Skill, derivingCast: boolean = false) {
+        const castBeginHooks = this.getBuffHooks(BuffHookTarget.CAST_BEGIN);
+        castBeginHooks.forEach((hook) => {
+            hook.handler(this, skill);
+        });
+
         /* handle derived skills */
         if (skill.derived && !derivingCast) {
             throw new Error('Cannot cast a derived skill directly.');
@@ -36,7 +51,14 @@ export class GameHandle {
             }
         }
 
-        /* handle cast events */
+        const castBeforeEffect = this.getBuffHooks(
+            BuffHookTarget.CAST_BEFORE_EFFECT,
+        );
+        castBeforeEffect.forEach((hook) => {
+            hook.handler(this, skill);
+        });
+
+        /* handle cast effects */
         for (const effect of skill._castEffectList) {
             effect.apply();
         }
@@ -58,6 +80,19 @@ export class GameHandle {
         this.combos = Object.values(job.combos);
         this.buffs = job.buffs;
         this.resources = job.resources;
+    }
+
+    private getBuffHooks(target: BuffHookTarget) {
+        return this.activeBuffs
+            .map((activeBuff) => {
+                if (activeBuff.buff.hooks) {
+                    return activeBuff.buff.hooks.filter(
+                        (hook) => hook.target === target,
+                    );
+                }
+                return [];
+            })
+            .reduce((a, b) => a.concat(b), []);
     }
 
     lastDamage: number = 0;

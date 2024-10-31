@@ -141,3 +141,12 @@ describe('SMR Iaijutsu Test', () => {
         expect(gh.skillLogger.getLast()?.skill.name).equal('纷乱雪月花');
     });
 });
+
+describe('SMR Meikyo Shisui Test', () => {
+    gh.reset();
+    gh.cast(smr.MeikyoShisui);
+    gh.cast(smr.Gekko);
+    expect(gh.activeBuffs.find((item) => item.buff.name === '风月')).to.exist;
+    gh.cast(smr.Kasha);
+    expect(gh.activeBuffs.find((item) => item.buff.name === '风花')).to.exist;
+});

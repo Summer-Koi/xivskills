@@ -1,7 +1,7 @@
 import { DerivedSkill, Skill, SkillCategory } from '../xivsim/index.ts';
 import { Combo } from '../xivsim/index.ts';
 import { Resource } from '../xivsim/index.ts';
-import { Buff } from '../xivsim/index.ts';
+import { Buff, BuffHookTarget, BuffHook } from '../xivsim/index.ts';
 import { Damage, ComboSuccess, ChangeResource, ClearResource, AddBuff } from '../xivsim/effect.ts';
 /* basic weapon skills */
 
@@ -78,12 +78,31 @@ const IaijutsuDerivation: DerivedSkill[] = [
 Iaijutsu.addDerivedSkill(...IaijutsuDerivation);
 Iaijutsu.addCastCondition(() => false);
 
+const MeikyoShisui = new Skill('明镜止水', '', SkillCategory.Ability, false, 60);
+const MeikyoShisuiBuff = new Buff('明镜止水');
+
+MeikyoShisui.addCastEffect(AddBuff(MeikyoShisuiBuff, 15));
+
+MeikyoShisuiBuff.addHook({
+    target: BuffHookTarget.CAST_BEFORE_EFFECT,
+    handler: (gh, skill) => {
+        if (skill === Gekko) {
+            AddBuff(Fugetsu, 40).attach(gh).apply();
+        }
+        if (skill === Kasha) {
+            AddBuff(Fuka, 40).attach(gh).apply();
+        }
+    },
+});
+
+/* exports */
+
 export const SamuraiJob = {
     name: 'Samurai',
     combos: { YukiCombo, KashaCombo, GekkoCombo },
-    skills: { Hakaze, Jinpu, Gekko, Shifu, Kasha, Yukikaze, Iaijutsu, Higanbana, MidareSetsugekka },
-    buffs: {},
+    skills: { Hakaze, Jinpu, Gekko, Shifu, Kasha, Yukikaze, Iaijutsu, Higanbana, MidareSetsugekka, MeikyoShisui },
+    buffs: { Fugetsu, Fuka, MeikyoShisuiBuff },
     resources: { Kenki, Getsu, Ka, Setsu },
 };
 
-export default { Hakaze, Jinpu, Gekko, Shifu, Kasha, Yukikaze, Iaijutsu };
+export default { Hakaze, Jinpu, Gekko, Shifu, Kasha, Yukikaze, Iaijutsu, MeikyoShisui };

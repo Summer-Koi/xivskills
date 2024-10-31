@@ -8,6 +8,7 @@ export abstract class Effect {
     protected _gameHandle: GameHandle | undefined;
     public attach(gameHandle: GameHandle) {
         this._gameHandle = gameHandle;
+        return this;
     }
     protected applyWithPreChecks() {
         if (this._gameHandle === undefined) {
@@ -105,12 +106,13 @@ class ComboSuccessEffect extends Effect {
         this.successEffect = successEffect;
         this.failEffect = failEffect;
     }
-    public attach(gameHandle: GameHandle): void {
+    public attach(gameHandle: GameHandle) {
         super.attach(gameHandle);
         this.successEffect.attach(gameHandle);
         if (this.failEffect !== undefined) {
             this.failEffect.attach(gameHandle);
         }
+        return this;
     }
     doApply() {
         if (this.combo.checkCombo(this.skill)) {
