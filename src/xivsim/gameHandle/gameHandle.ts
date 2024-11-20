@@ -1,15 +1,16 @@
-import { Resource } from './resource.ts';
+import { Resource } from '../resource.ts';
 import {
     Buff,
     ActiveBuff,
     BuffHookTarget,
     BuffHook,
     SkillCastBuffHook,
-} from './buff.ts';
-import { Skill } from './skill.ts';
-import { Combo } from './combo.ts';
-import { Job } from './job.ts';
-import { SkillLogger } from './logger.ts';
+} from '../buff.ts';
+import { Skill } from '../skill.ts';
+import { Combo } from '../combo.ts';
+import { Job } from '../job.ts';
+import { SkillLogger } from '../logger.ts';
+import { EffectLog } from '../effect.ts';
 
 /* hook cast procedure */
 
@@ -24,6 +25,8 @@ export class GameHandle {
     GCD: number = 2500; // ms
 
     skillLogger: SkillLogger = new SkillLogger();
+
+    lastFlushTime: number = 0; // ms
 
     cast(skill: Skill, derivingCast: boolean = false) {
         const castBeginHooks = this.getBuffHooks(BuffHookTarget.CAST_BEGIN);
@@ -59,8 +62,9 @@ export class GameHandle {
         });
 
         /* handle cast effects */
+        let effectLogs: EffectLog[] = [];
         for (const effect of skill._castEffectList) {
-            effect.apply();
+            effectLogs.push(effect.apply());
         }
 
         /* update combo status */
@@ -70,7 +74,7 @@ export class GameHandle {
         });
 
         /* skill logging */
-        this.skillLogger.log(skill);
+        this.skillLogger.log(skill, effectLogs);
     }
 
     bind(job: Job) {
@@ -95,9 +99,7 @@ export class GameHandle {
             .reduce((a, b) => a.concat(b), []);
     }
 
-    lastDamage: number = 0;
     dealFinalDamage(damage: number) {
-        this.lastDamage = damage;
     }
 
     resetCombos() {
@@ -114,13 +116,10 @@ export class GameHandle {
         this.activeBuffs = [];
     }
     reset() {
+        this.lastFlushTime = 0;
         this.resetCombos();
         this.resetResources();
         this.resetBuffs();
         this.skillLogger.clear();
-    }
-
-    getLastDamage() {
-        return this.lastDamage;
     }
 }

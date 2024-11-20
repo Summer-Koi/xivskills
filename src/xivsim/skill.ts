@@ -1,4 +1,4 @@
-import { GameHandle } from './gameHandle.ts';
+import { GameHandle } from './gameHandle/index.ts';
 import { Effect } from './effect.ts';
 
 export enum SkillCategory {

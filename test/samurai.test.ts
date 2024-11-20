@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { SamuraiJob } from '../src/data/samurai.ts';
-import { GameHandle } from '../src/xivsim/gameHandle.ts';
+import { GameHandle } from '../src/xivsim/gameHandle/index.ts';
 import smr from '../src/data/samurai.ts';
 
 const gh = new GameHandle();
@@ -9,49 +9,49 @@ gh.bind(SamuraiJob);
 describe('SMR Basic Combo Damage Test', () => {
     it('Yuuki Combo', () => {
         gh.cast(smr.Hakaze);
-        expect(gh.lastDamage).equal(200);
+        expect(gh.skillLogger.getLastDamage()).equal(200);
         gh.cast(smr.Yukikaze);
-        expect(gh.lastDamage).equal(300);
+        expect(gh.skillLogger.getLastDamage()).equal(300);
         gh.cast(smr.Yukikaze);
-        expect(gh.lastDamage).equal(120);
+        expect(gh.skillLogger.getLastDamage()).equal(120);
     });
     it('Kasha Combo', () => {
         gh.cast(smr.Hakaze);
-        expect(gh.lastDamage).equal(200);
+        expect(gh.skillLogger.getLastDamage()).equal(200);
         gh.cast(smr.Shifu);
-        expect(gh.lastDamage).equal(280);
+        expect(gh.skillLogger.getLastDamage()).equal(280);
         gh.cast(smr.Kasha);
-        expect(gh.lastDamage).equal(380);
+        expect(gh.skillLogger.getLastDamage()).equal(380);
         gh.cast(smr.Kasha);
-        expect(gh.lastDamage).equal(170);
+        expect(gh.skillLogger.getLastDamage()).equal(170);
         gh.cast(smr.Shifu);
-        expect(gh.lastDamage).equal(120);
+        expect(gh.skillLogger.getLastDamage()).equal(120);
     });
     it('Gekko Combo', () => {
         gh.cast(smr.Hakaze);
-        expect(gh.lastDamage).equal(200);
+        expect(gh.skillLogger.getLastDamage()).equal(200);
         gh.cast(smr.Jinpu);
-        expect(gh.lastDamage).equal(280);
+        expect(gh.skillLogger.getLastDamage()).equal(280);
         gh.cast(smr.Gekko);
-        expect(gh.lastDamage).equal(380);
+        expect(gh.skillLogger.getLastDamage()).equal(380);
         gh.cast(smr.Gekko);
-        expect(gh.lastDamage).equal(170);
+        expect(gh.skillLogger.getLastDamage()).equal(170);
         gh.cast(smr.Jinpu);
-        expect(gh.lastDamage).equal(120);
+        expect(gh.skillLogger.getLastDamage()).equal(120);
     });
     it('Mixed Combo', () => {
         gh.cast(smr.Hakaze);
-        expect(gh.lastDamage).equal(200);
+        expect(gh.skillLogger.getLastDamage()).equal(200);
         gh.cast(smr.Gekko);
-        expect(gh.lastDamage).equal(170);
+        expect(gh.skillLogger.getLastDamage()).equal(170);
         gh.cast(smr.Kasha);
-        expect(gh.lastDamage).equal(170);
+        expect(gh.skillLogger.getLastDamage()).equal(170);
         gh.cast(smr.Hakaze);
-        expect(gh.lastDamage).equal(200);
+        expect(gh.skillLogger.getLastDamage()).equal(200);
         gh.cast(smr.Jinpu);
-        expect(gh.lastDamage).equal(280);
+        expect(gh.skillLogger.getLastDamage()).equal(280);
         gh.cast(smr.Kasha);
-        expect(gh.lastDamage).equal(170);
+        expect(gh.skillLogger.getLastDamage()).equal(170);
     });
 });
 

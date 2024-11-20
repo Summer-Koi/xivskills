@@ -1,8 +1,14 @@
-import { GameHandle } from './gameHandle.ts';
+import { GameHandle } from './gameHandle/index.ts';
 import { Combo } from './combo.ts';
 import { Skill } from './skill.ts';
 import { Resource } from './resource.ts';
 import { Buff } from './buff.ts';
+
+export type EffectLog = {
+    type: string;
+    detail: string;
+    value: number;
+};
 
 export abstract class Effect {
     protected _gameHandle: GameHandle | undefined;
@@ -14,11 +20,11 @@ export abstract class Effect {
         if (this._gameHandle === undefined) {
             throw new Error('GameHandle not attached');
         }
-        this.doApply(this._gameHandle);
+        return this.doApply(this._gameHandle);
     }
-    protected abstract doApply(handle: GameHandle): void;
-    apply(): void {
-        this.applyWithPreChecks();
+    protected abstract doApply(handle: GameHandle): EffectLog;
+    apply(){
+        return this.applyWithPreChecks();
     }
 }
 
@@ -29,7 +35,13 @@ class DamageEffect extends Effect {
         this.rawPotency = rawPotency;
     }
     doApply(handle: GameHandle) {
-        handle.dealFinalDamage(this.rawPotency);
+        let damage = this.rawPotency
+        handle.dealFinalDamage(damage);
+        return {
+            type: 'damage',
+            detail: '',
+            value: damage,
+        }
     }
 }
 
@@ -48,13 +60,23 @@ class ResourceChangeEffect extends ResourceEffect {
         this.delta = delta;
     }
     doApply() {
-        this.resource.current += this.delta;
+        this.resource.change(this.delta);
+        return {
+            type: 'resource',
+            detail: `resource ${this.resource.name} changed by ${this.delta}`,
+            value: this.delta,
+        }
     }
 }
 
 class ResourceClearEffect extends ResourceEffect {
     doApply() {
         this.resource.setToMin();
+        return {
+            type: 'resource',
+            detail: `resource ${this.resource.name} cleared`,
+            value: 0,
+        }
     }
 }
 
@@ -76,7 +98,11 @@ class AddBuffEffect extends BuffEffect {
         for (const activeBuff of handle.activeBuffs) {
             if (activeBuff.buff === this.buff) {
                 activeBuff.duration = this.duration;
-                return;
+                return {
+                    type: 'buff',
+                    detail: `buff ${this.buff.name} refreshed`,
+                    value: this.duration,
+                };
             }
         }
         handle.activeBuffs.push({
@@ -84,6 +110,11 @@ class AddBuffEffect extends BuffEffect {
             duration: this.duration,
             startTime: 0,
         });
+        return {
+            type: 'buff',
+            detail: `buff ${this.buff.name} added`,
+            value: this.duration,
+        };
     }
 }
 
@@ -116,10 +147,15 @@ class ComboSuccessEffect extends Effect {
     }
     doApply() {
         if (this.combo.checkCombo(this.skill)) {
-            this.successEffect.apply();
+            return this.successEffect.apply();
         } else {
             if (this.failEffect !== undefined) {
-                this.failEffect.apply();
+                return this.failEffect.apply();
+            }
+            return {
+                type: 'combo',
+                detail: 'combo failed, no fail effect',
+                value: 0,
             }
         }
     }
